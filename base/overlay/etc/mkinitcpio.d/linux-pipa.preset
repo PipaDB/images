@@ -1,0 +1,7 @@
+# mkinitcpio preset file for the 'linux-pipa' package
+
+ALL_kver="/boot/vmlinuz-linux-pipa"
+
+PRESETS=('default')
+
+default_image="/boot/initramfs-linux-pipa.img"
