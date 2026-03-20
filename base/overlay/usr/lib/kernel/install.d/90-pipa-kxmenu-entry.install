@@ -1,0 +1,27 @@
+#!/bin/bash
+# /usr/lib/kernel/install.d/90-pipa-kxmenu-entry.install
+# Writes a kxmenu-compatible BLS entry for linux-pipa after kernel install.
+
+COMMAND="$1"
+KERNEL_VERSION="$2"
+
+[[ "$COMMAND" == "add" ]] || exit 0
+
+BOOT_ROOT="/boot"
+ENTRY_DIR="$BOOT_ROOT/loader/entries"
+ENTRY_FILE="$ENTRY_DIR/linux-pipa.conf"
+
+mkdir -p "$ENTRY_DIR"
+
+CMDLINE="$(cat /etc/cmdline.d/*.conf 2>/dev/null | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
+
+cat > "$ENTRY_FILE" << CONF
+title Arch Linux (pipa)
+version $KERNEL_VERSION
+linux /vmlinuz-linux-pipa
+initrd /initramfs-linux-pipa.img
+devicetree /dtb-linux-pipa
+options $CMDLINE
+CONF
+
+echo "Written kxmenu entry: $ENTRY_FILE"
